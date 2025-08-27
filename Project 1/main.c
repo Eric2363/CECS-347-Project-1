@@ -4,7 +4,7 @@
 #include "PortF.h"
 
 
-
+#define RED_LED 0x02
 
 int main(void){
 
@@ -15,10 +15,7 @@ int main(void){
 
 	while(1){
 		
-		GPIO_PORTF_DATA_R |=0x02;
-		Delay();
-		GPIO_PORTF_DATA_R &=~0x02;
-		Delay();
+		// shouldnt leave empty, something should indicate it is waiting for interupt.
 	
 	
 	}
@@ -27,3 +24,10 @@ int main(void){
 	return 0;
 	
 }
+
+
+void SysTick_Handler(void){
+
+		GPIO_PORTF_DATA_R ^= RED_LED;
+	
+	}

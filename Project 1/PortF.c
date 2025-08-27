@@ -19,13 +19,13 @@ void PortF_Init(void){
 		
 	// GPIO SETUP
 	//------------------------------
-	GPIO_PORTF_LOCK_R |= PORTF_UNLOCK_CODE;
-	GPIO_PORTF_CR_R |= PORTF_CR_CODE;
-	GPIO_PORTF_DIR_R |= RED_LED_MASK;
-	GPIO_PORTF_AFSEL_R &=~RED_LED_MASK;
-	GPIO_PORTF_DEN_R |= RED_LED_MASK;
-	GPIO_PORTF_AMSEL_R &=~RED_LED_MASK;
-	GPIO_PORTF_PCTL_R |= PORTF_PCTL_CODE;
+	GPIO_PORTF_LOCK_R |= PORTF_UNLOCK_CODE; // Unlock port F.
+	GPIO_PORTF_CR_R |= PORTF_CR_CODE;	// Enable changes to port F.
+	GPIO_PORTF_DIR_R |= RED_LED_MASK; // Set F1 as output.
+	GPIO_PORTF_AFSEL_R &=~RED_LED_MASK;// Disable Alternate Function
+	GPIO_PORTF_DEN_R |= RED_LED_MASK;	// Enable F1 pin
+	GPIO_PORTF_AMSEL_R &=~RED_LED_MASK;	// Disable Analog Mode
+	GPIO_PORTF_PCTL_R |= PORTF_PCTL_CODE;	// Enable F1 pctl
 		
 		
 		
