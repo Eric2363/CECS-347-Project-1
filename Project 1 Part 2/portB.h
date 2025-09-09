@@ -10,3 +10,5 @@
 
 #define PORTB_PRIORITY_1 0x00002000
 
+
+void portB_Init();
