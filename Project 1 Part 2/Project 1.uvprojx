@@ -415,6 +415,16 @@
               <FileType>1</FileType>
               <FilePath>.\timer1.c</FilePath>
             </File>
+            <File>
+              <FileName>portB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\portB.c</FilePath>
+            </File>
+            <File>
+              <FileName>portB.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\portB.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
