@@ -26,14 +26,14 @@ void portB_Init(){
 	GPIO_PORTB_PCTL_R &=~ PORTB_PCTL_CODE;
 	
 	//Interupt Setup Need to add edge interupt for B4 ECHO. Input
-	GPIO_PORTB_IS_R &=~B4_MASK;
-	GPIO_PORTB_IBE_R |= B4_MASK;
-	GPIO_PORTB_IM_R |= B4_MASK;
-	GPIO_PORTB_ICR_R = B4_MASK;
+	GPIO_PORTB_IS_R &=~B4_MASK; // Edge sensitive
+	GPIO_PORTB_IBE_R |= B4_MASK; // Both Edges
+	GPIO_PORTB_IM_R |= B4_MASK;	//Arm interupt
+	GPIO_PORTB_ICR_R = B4_MASK; // Clear Interupt flag
 	
 	// Priority Level setup
-	NVIC_PRI0_R |= (NVIC_PRI0_R & 0xFFFF1FFF) | PORTB_PRIORITY_1;
-	NVIC_EN0_R |= 0x00000001;
+	NVIC_PRI0_R = (NVIC_PRI0_R & 0xFFFF1FFF) | PORTB_PRIORITY_1; // Priority 1
+	NVIC_EN0_R = 0x00000002;
 	
 	
 	

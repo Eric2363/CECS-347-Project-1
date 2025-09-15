@@ -425,6 +425,16 @@
               <FileType>5</FileType>
               <FilePath>.\portB.h</FilePath>
             </File>
+            <File>
+              <FileName>Uart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Uart.h</FilePath>
+            </File>
+            <File>
+              <FileName>Uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
