@@ -1,3 +1,3 @@
-./main.o: main.c PLL.h SysTick.h PortF.h tm4c123gh6pm.h timer1.h \
-  C:\Keil_v5\ARM\ARMCLANG\include\stdint.h portB.h \
-  C:\Keil_v5\ARM\ARMCLANG\include\stdio.h
+./main.o: main.c C:\Keil_v5\ARM\ARMCLANG\include\stdio.h \
+  C:\Keil_v5\ARM\ARMCLANG\include\stdint.h PLL.h SysTick.h PortF.h \
+  tm4c123gh6pm.h timer1.h portB.h Uart.h

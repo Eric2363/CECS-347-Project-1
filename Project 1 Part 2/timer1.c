@@ -2,60 +2,72 @@
 Name: Eric Santana
 ID: 015107467
 ORG: CSULB
-Class: CECS 347 Embedded Systems II
+Class: CECS 347
 --------------------------
-Description: Enable the general purpose timer 1
-Timer 1A: 16-bit periodic, 10 µs delay
-Timer 1B: 16-bit periodic, stopwatch for echo pulse
+Description: Enable the general purpose timer 1A to produce a 10us delay.
+Timer 1A Config: 16bit mode, One shot, down counter
 */
 
 #include "timer1.h"
 
-// Timer1 Setup
-//===========================================================================
 void Timer1_Init(){
-    SYSCTL_RCGCTIMER_R |= TIMER1;       // Activate TIMER1
-    TIMER1_CFG_R = MODE_16bit;          // Configure for 16-bit mode
-    Timer1A_Init();
-    Timer1B_Init();
+	SYSCTL_RCGCTIMER_R |= TIMER1;      	// Activate TIMER1
+	TIMER1_CFG_R = MODE_16bit;
+	Timer1A_Init();
+	Timer1B_Init();
 }
-
-// Timer A Setup (10 µs delay)
+//Timer 1 Setup
 //===========================================================================
-void Timer1A_Init(){
-    TIMER1_CTL_R &= ~TIMER1A_MASK;      // Disable Timer1A during setup
-    TIMER1_TAMR_R = PERIODIC;           // Periodic mode, down counter
-    TIMER1_TAILR_R = A_RELOAD_VALUE;    // Reload value 159 for 10 µs
-    TIMER1_TAPR_R = A_PRESCALE;         // Prescale = 0
+void Timer1A_Init(void){
+	
+
+  TIMER1_CTL_R &=~ TIMER1A_MASK;       // Disable TIMER1 A during setup
+  TIMER1_TAMR_R = PERIODIC_MODE;      // Periodic Mode, down-counter
+  TIMER1_TAILR_R = MAX_RELOAD;        // Reload value (16-bit max)
+  TIMER1_TAPR_R = PRESCALE;           // prescale = 0. Withing resoultion of 16 bits.
+	TIMER1_ICR_R = TIMER1A_MASK;				// Clear TIMER1A timeout flag
+
 }
 
-void delayA(void){
-    TIMER1_TAILR_R = A_RELOAD_VALUE;
-    TIMER1_ICR_R   = TIMER_ICR_TATOCINT; // Clear timeout flag
-    TIMER1_CTL_R  |= TIMER_CTL_TAEN;     // Start timer
+void delay(){ // 10 micro second delay
+	
+    TIMER1_CTL_R |= TIMER1A_MASK;          // Start timer
 
     while((TIMER1_RIS_R & TIMER_RIS_TATORIS) == 0); // Wait
-    TIMER1_ICR_R   = TIMER_ICR_TATOCINT; // Clear flag
+	
+    TIMER1_ICR_R = TIMER1A_MASK;       // Clear flag
+	
 }
 
-// Timer B Setup (stopwatch)
+// Timer B Setup
 //===========================================================================
-void Timer1B_Init(){
-    TIMER1_CTL_R &= ~TIMER1B_MASK;           // Disable Timer1B
-    TIMER1_TBMR_R = 0;                       // Clear mode bits
-    TIMER1_TBMR_R |= TIMER_TBMR_TBMR_PERIOD; // Periodic mode
-    TIMER1_TBILR_R = B_RELOAD_VALUE;         // Reload value (e.g. 18175)
-    TIMER1_TBPR_R  = B_PRESCALE;             // Prescale (e.g. 9)
-    TIMER1_ICR_R   = TIMER_ICR_TBTOCINT;     // Clear timeout
+void Timer1B_Init(){ // 50ms counting
+	
+	TIMER1_CTL_R &=~ TIMER1B_MASK;	//Disable Timer1 B during setup
+	TIMER1_TBMR_R = PERIODIC_MODE;	//Peridic Mode, down counter
+	TIMER1_TBILR_R = TIMERB_RELOAD;	// Reload value for 50ms
+	TIMER1_TBPR_R = PRESCALE_B;			// prescale of 12
+	TIMER1_ICR_R = TIMER1B_MASK;		// Clear timer flag
+	
+}
+//Stop Timer B
+void Start_TimerB(void){
+	TIMER1_TBILR_R = TIMERB_RELOAD;	// Fresh reload
+	TIMER1_CTL_R |= TIMER1B_MASK;		// Start Timer B
+	
+
+}
+//Stop Timer B
+void Stop_TimerB(){
+	TIMER1_CTL_R &=~ TIMER1B_MASK; // stop timer
+	TIMER1_ICR_R = TIMER1B_MASK;	// Clear timerB flag
 }
 
-// Start Timer1B
-void StartTimerB(void){
-    TIMER1_ICR_R  = TIMER_ICR_TBTOCINT;      // Clear timeout flag
-    TIMER1_CTL_R |= TIMER_CTL_TBEN;          // Start Timer1B
+// Calculate elapsed cycles
+uint32_t Get_Elapsed_MC(){
+	
+	// (Reload ValueB - CurrentValueB) * PrescaleB
+	return (TIMER1_TBILR_R - TIMER1_TBR_R) * PRESCALE_B;
 }
 
-// Stop Timer1B
-void StopTimerB(void){
-    TIMER1_CTL_R &= ~TIMER_CTL_TBEN;         // Stop Timer1B
-}
+

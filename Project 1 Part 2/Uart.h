@@ -1,3 +1,4 @@
+#include <stdint.h>
 //==================================================================
 //UART0 and GPIO PORT A Addresses
 //==================================================================
@@ -23,3 +24,5 @@ char Uart_Recieve(void);
 void Uart_Transmit(char data);
 
 void Uart_SendString(const char* str);
+
+void Uart_SendNumber(uint32_t num);

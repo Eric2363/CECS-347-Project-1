@@ -1,5 +1,3 @@
-
-
 #include "Uart.h"
 #include <stdint.h>
 
@@ -60,4 +58,27 @@ void Uart_SendString(const char* str){
 		Uart_Transmit(*str++);
 	}
 
+}
+//==================================================================
+// Send an unsigned integer as ASCII decimal string
+//==================================================================
+void Uart_SendNumber(uint32_t num){
+    char buffer[12];   // enough for 32-bit integer
+    int i = 0;
+
+    if(num == 0){
+        Uart_Transmit('0');
+        return;
+    }
+
+    // Convert number to string (reverse order)
+    while(num > 0 && i < sizeof(buffer)-1){
+        buffer[i++] = (num % 10) + '0';
+        num /= 10;
+    }
+
+    // Send digits in correct order
+    while(i > 0){
+        Uart_Transmit(buffer[--i]);
+    }
 }
